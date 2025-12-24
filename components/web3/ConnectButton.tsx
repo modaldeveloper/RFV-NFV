@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { SUPPORTED_CHAINS } from '@/lib/contracts/config';
 
 export function ConnectButton() {
@@ -22,8 +22,9 @@ export function ConnectButton() {
     try {
       setConnecting(true);
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      const chainIdNumber = parseInt(chainId as string, 16);
       
-      if (!SUPPORTED_CHAINS.includes(parseInt(chainId, 16))) {
+      if (!(SUPPORTED_CHAINS as readonly number[]).includes(chainIdNumber)) {
         toast({
           title: "Wrong Network",
           description: "Please connect to Ethereum Mainnet or Goerli",
